@@ -1,0 +1,72 @@
+body {
+	background-image: url(../images/bg.jpg);
+	background-repeat: no-repeat;
+	background-position: center top;
+	background-size: auto;
+}
+
+h2 {
+	text-align: center;
+}
+
+#Search {
+	background-color: gray;
+	padding: 10px;
+	padding-bottom: -8px;
+	opacity: 0.7;
+}
+
+#content {
+	margin: 10px;
+	padding: 18px;
+}
+
+ul.ul {
+	list-style: none;
+	margin-left: -52px;
+	margin-right: -12px;
+	margin-bottom: -15px;
+}
+
+li.dontshow {
+	visibility: hidden;
+}
+
+#techsupport {
+	margin-bottom: -8px;
+}
+
+span.font1 {
+	color: white;
+	font-size: 15px;
+	font-family: sans-serif;
+}
+
+span.red {
+	color: red;
+}
+
+span.black {
+	color: black;
+	font-weight: bolder;
+	font-size: 23px;
+	font-family: monospace;
+}
+
+span.radiofont {
+	color: white;
+	font-size: 13px;
+}
+
+#Seperate {
+	background-color: white;
+	font-weight: bold;
+}
+
+#Result {
+	margin-top: 20px;
+}
+
+.nav-tabs > li > a {
+	background-color: white;
+}
