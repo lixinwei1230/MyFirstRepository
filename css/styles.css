@@ -3,6 +3,7 @@ body {
 	background-repeat: no-repeat;
 	background-position: center top;
 	background-size: auto;
+	background-attachment: fixed;
 }
 
 h2 {
@@ -10,10 +11,9 @@ h2 {
 }
 
 #Search {
-	background-color: gray;
+	background: rgba(104, 104, 104, 0.5);
 	padding: 10px;
 	padding-bottom: -8px;
-	opacity: 0.7;
 }
 
 #content {
@@ -21,11 +21,23 @@ h2 {
 	padding: 18px;
 }
 
+div.form-group {
+	margin-top: 16px;
+}
+
 ul.ul {
 	list-style: none;
 	margin-left: -52px;
 	margin-right: -12px;
 	margin-bottom: -15px;
+}
+
+ul > li {
+	list-style: none;
+}
+
+li.white {
+	color: white;
 }
 
 li.dontshow {
@@ -69,4 +81,51 @@ span.radiofont {
 
 .nav-tabs > li > a {
 	background-color: white;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus{
+    color: white;
+    background-color: #337ab7;  
+} 
+
+#clearbtn {
+	width: 88px;
+	margin-left: 5px;
+}
+
+#foreheader {
+	background: rgba(242, 126, 127, 1.0);
+}
+
+#pic {
+	display: block; 
+	margin: auto; 
+	margin-top:8px;
+}
+
+#temp {
+	font-size: 60px;
+	font-weight: bolder;
+}
+
+#tempSpan {
+	float: top;
+	bottom: 40px;
+	float: top;
+}
+
+#lowtemp {
+	color: blue;
+}
+
+#hightemp {
+	color: green;
+}
+
+#facebook {
+	float: right; 
+	position: relative; 
+	bottom:6px;
 }

@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<h2 id="demo">Forecast Search</h2>
+<h2>Forecast Search</h2>
 
 <div id="content" class="container-fluid">
   
@@ -27,7 +27,7 @@
                 <input class="form-control" type="text"
                   id="stAddress" name="stAddress" value="" placeholder="Enter street address">
             </li>
-            <li><span class="red">Please enter the street address</span></li>
+            <li><span id="valiAddre" style="display:none;" class="red">Please enter the street address</span></li>
           </ul>
         </div>  
 
@@ -40,7 +40,7 @@
                 <input class="form-control" type="text"
                 id="city" name="city" value="" placeholder="Enter the city name">  
             </li>
-            <li><span class="red">Please enter the city</span></li>
+            <li><span id="valiCity" style="display:none;" class="red">Please enter the city</span></li>
           </ul>
         </div>
 
@@ -104,15 +104,15 @@
                 <option value="WY">Wyoming</option>
               </select>
             </li>
-            <li><span class="red">Please select a state</span></li>
+            <li><span id="valiState" style="display:none;" class="red">Please select a state</span></li>
           </ul>
         </div>
 
         <div class="form-group col-lg-2 col-xs-12">
           <ul class="ul">
-            <li class="dontshow">a</li>
+            <!--<li class="dontshow">a</li>-->
             <li >
-              <label class="control-label" for="selectSite"><span class="font1">Degree:</span><span class="red">*</span></label>
+              <label class="control-label" for="temperature"><span class="font1">Degree:</span><span class="red">*</span></label>
             </li>
             <li>
               <label class="radio-inline">
@@ -131,7 +131,7 @@
           <ul class="ul">
             <li class="dontshow">a</li>
             <li>
-              <button class="btn btn-Default pull-right"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>  Clear</button>
+              <button id="clearbtn" onclick="resetInputField(this)" type="button" class="btn btn-Default pull-right"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>  Clear</button>
               <button onclick="parseJson()" type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>Search</button>
             </li>
             <li class="dontshow">a</li>
@@ -159,7 +159,7 @@
   </div>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid" id='display' style="">
   <div class="row">
       <section id="Result" class="col-xs-12 col-lg-10 col-lg-offset-1">
         <ul class="nav nav-tabs">
@@ -170,13 +170,76 @@
 
         <div class="tab-content">
           <div id="home" class="tab-pane fade in active">
-            <h3>HOME</h3>
-            <p>Some content.</p>
+            <div class="row">
+              <section class="col-lg-6 col-xs-12">
+                <div id="foreheader" class="col-lg-12">
+                  <div class="row">
+                    <div id="forepic" class="col-lg-5 col-xs-12">
+                      <img id="pic" src="images/clear.png" height="120px" width="120px">
+                    </div>
+                    <div id="forecontent" class="col-lg-7 col-xs-12" style="">
+                      <ul style="text-align: center;">
+                        <li class="white" >Mostly Cloudy in Los Angeles, CA</li>
+                        <li class="white"><span id="temp">71</span>°F</li>
+                        <li >
+                          <span id="lowtemp">L: 70°F</span> | <span id="hightemp">H: 79°F</span>
+                          <a href=""><img id="facebook" src="images/fb_icon.png" width="25px" height="25px"></a>
+                        </li>
+                      </ul>
+
+                    </div>
+                  </div>
+                </div>
+                
+                <table class="table table-striped">
+                  <tr>
+                    <td>Precipitation</td>
+                    <td>12345678</td>
+                  </tr>
+                  <tr class="danger">
+                    <td>Chance of Rain</td>
+                    <td>123</td>
+                  </tr>
+                  <tr>
+                    <td>Wind Speed</td>
+                    <td>123</td>
+                  </tr>
+                  <tr class="danger">
+                    <td>Dew Point</td>
+                    <td>123</td>
+                  </tr>
+                  <tr>
+                    <td>Humidity</td>
+                    <td>123</td>
+                  </tr>
+                  <tr class="danger">
+                    <td>Visibility</td>
+                    <td>123</td>
+                  </tr>
+                  <tr>
+                    <td>Sunrise</td>
+                    <td>123</td>
+                  </tr>
+                  <tr class="danger">
+                    <td>Sunset</td>
+                    <td>123</td>
+                  </tr>
+                </table>
+              </section>
+
+              <section id="foregeo" class="col-lg-6">
+
+              </section>
+            </div>
           </div>
+
+
           <div id="menu1" class="tab-pane fade">
             <h3>Menu 1</h3>
             <p>Some content in menu 1.</p>
           </div>
+
+
           <div id="menu2" class="tab-pane fade">
             <h3>Menu 2</h3>
             <p>Some content in menu 2.</p>
@@ -186,8 +249,13 @@
   </div>
 </div>
 
+<div class="container-fluid">
+  <p id="demo">123</p>
+</div>
+
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/script.js"></script>
+<script src="http://openlayers.org/api/OpenLayers.js"></script>
 </body>
 </html>

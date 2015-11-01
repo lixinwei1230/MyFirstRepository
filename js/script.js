@@ -1,45 +1,53 @@
-function checkInput () {
-	var a = 0;
-	if (document.getElementById('stAddress').value === "") {
-		alert("Please enter value for Address");
-		document.getElementById('stAddress').focus();
-		return false;
+function parseJson () {
+	var strAddress = '';
+	var City = '';
+	var State = '';
+	var Temp = '';
+
+    if (document.getElementById('stAddress').value === "") {
+		document.getElementById('valiAddre').style.display = "block";
 	} else {
-		a = a + 1;
+		document.getElementById('valiAddre').style.display = "none";
+		strAddress = document.getElementById('stAddress').value;
 	}
 	if (document.getElementById('city').value === "") {
-		alert("Please enter value for City");
-		document.getElementById('city').focus();
-		return false;
+		document.getElementById('valiCity').style.display = "block";
 	} else {
-		a = a + 1;
+		document.getElementById('valiCity').style.display = "none";
+		City = document.getElementById('city').value;
 	}
 	if (document.getElementById('state').value === "") {
-		alert("Please chooes a State");
+		document.getElementById('valiState').style.display = "block";
 		return false;
 	} else {
-		a = a + 1;
+		document.getElementById('valiCity').style.display = "none";
+		State = document.getElementById('state').value;
 	}
-	if (a != 3) {
-		return false;
+	if (document.getElementById('Fahrenheit').checked) {
+		Temp = document.getElementById('Fahrenheit').value;
 	} else {
-		document.getElementById("hidden").setAttribute("value","true");
-		return true;
+		Temp = document.getElementById('Celsius').value;
 	}
-}
-
-function parseJson () {
-    //alert("hello world");
+    //document.getElementById("display").style.display = "block";
     var request;
+    var url = '';
     if (window.XMLHttpRequest) {
       request = new XMLHttpRequest();
     } else {
       request = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    request.open("GET", "server.php?a=1&b=2", true);
+    url += 'server.php?stAddress=';
+    url += strAddress + '&city=';
+    url += City + '&state=';
+    url += State + '&temperature=';
+    url += Temp;
+    alert(url);
+    request.open("GET", url, true);
     request.onreadystatechange = function() {
       if((request.status === 200) && (request.readyState ===4)) {
         document.getElementById("demo").innerHTML = request.responseText;
+        //var test = request.responseText;
+        //alert(test);
       }
     }
     request.send();
@@ -50,6 +58,6 @@ function resetInputField (myForm) {
 	document.getElementById('city').value = "";
 	document.getElementById('state').options[0].selected = 'true';
 	document.getElementById('Fahrenheit').checked = 'true';
-	//document.getElementById("display").style.display = "none";
+	document.getElementById("display").style.display = "none";
 	return true;
 }

@@ -1,18 +1,18 @@
 <?php
 	function getJson() {
-		if ($_POST["stAddress"] !== "" && $_POST["city"] !== "" && $_POST["state"] !== "") {
+		if ($_GET["stAddress"] !== "" && $_GET["city"] !== "" && $_GET["state"] !== "") {
 			$api_key2 = "AIzaSyDaWbKyLfVK0vNk1w0rHSOEz8bJHmcEShE"; //This is the key for google maps
 			$url = "https://maps.googleapis.com/maps/api/geocode/xml?address=";
-			$url .= urlencode($_POST["stAddress"]) . ",";
-			$url .= "+" . urlencode($_POST["city"]) . ",";
-			$url .= "+" . urlencode($_POST["state"]);
+			$url .= urlencode($_GET["stAddress"]) . ",";
+			$url .= "+" . urlencode($_GET["city"]) . ",";
+			$url .= "+" . urlencode($_GET["state"]);
 			$url .= "&key=" . $api_key2;
-			//echo $url;
+			$url;
 			$xml = simplexml_load_file($url);
 			//var_dump($xml);
 			$lat = $xml -> result -> geometry -> location -> lat;
 			$lng = $xml -> result -> geometry -> location -> lng;
-			if ($_POST["temperature"] === "Fahrenheit") {
+			if ($_GET["temperature"] === "Fahrenheit") {
 				$units_value = "us";
 			} else {
 				$units_value = "si";
@@ -27,7 +27,8 @@
 			$json = file_get_contents($url1);
 			$json = json_decode($json, true);
 			$json = json_encode($json);
-			var_dump($json);
+			//var_dump($json);
+			//echo $json;
 			return $json;
 		} else {
 			//echo "PHP load failed. Please reload the website.";
@@ -39,14 +40,10 @@
 
 	function displayHeader($json) {
 		$temperature = intval($json["currently"]["temperature"]);
-		if (isset($_POST["submit"])) {
-			if ($_POST["temperature"] === "Fahrenheit") {
-				$temperature .= "°F";
-			} else {
-				$temperature .= "°C";
-			}
+		if ($_GET["temperature"] === "Fahrenheit") {
+			$temperature .= "°F";
 		} else {
-			//
+			$temperature .= "°C";
 		}
 		if ($json["currently"]["icon"] === "clear-day") {
 			$pic_url = "pic_for_hw6/clear.png"; 
@@ -118,14 +115,10 @@
 
 	function displayWind_Speed($json) {
 		$wind_Speed = intval($json["currently"]["windSpeed"]);
-		if (isset($_POST["submit"])) {
-			if ($_POST["temperature"] === "Fahrenheit") {
-				$wind_Speed .= " mph";
-			} else {
-				$wind_Speed .= " mts/sec";
-			}
+		if ($_GET["temperature"] === "Fahrenheit") {
+			$wind_Speed .= " mph";
 		} else {
-			//
+			$wind_Speed .= " mts/sec";
 		}
 		//$wind_Speed .= "mph";
 		return $wind_Speed;
@@ -133,14 +126,10 @@
 
 	function displayDew_Point($json) {
 		$dew_Point = intval($json["currently"]["dewPoint"]);
-		if (isset($_POST["submit"])) {
-			if ($_POST["temperature"] === "Fahrenheit") {
-				$dew_Point .= "°F";
-			} else {
-				$dew_Point .= "°C";
-			}
+		if ($_GET["temperature"] === "Fahrenheit") {
+			$dew_Point .= "°F";
 		} else {
-			//
+			$dew_Point .= "°C";
 		}
 		return $dew_Point;
 	}
@@ -153,14 +142,10 @@
 
 	function displayVisibility($json) {
 		$visibility = intval($json["currently"]["visibility"]);
-		if (isset($_POST["submit"])) {
-			if ($_POST["temperature"] === "Fahrenheit") {
-				$visibility .= " mi";
-			} else {
-				$visibility .= " kms";
-			}
+		if ($_GET["temperature"] === "Fahrenheit") {
+			$visibility .= " mi";
 		} else {
-			//
+			$visibility .= " kms";
 		}
 		//$visibility .= " mi";
 		return $visibility;
@@ -186,6 +171,12 @@
 <?php 
 	//$json = getJson();
 	//echo "hello world";
-	//getJson();
-	print_r($_GET);
+	$json = getJson();
+	echo $json;
+	//print_r($_GET);
+	/*if (isset($_GET['stAddress'])) {
+		echo "1";
+	} else {
+		echo "2";
+	}*/
 ?>
