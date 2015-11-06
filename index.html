@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  <link rel="stylesheet" href="http://openlayers.org/en/v3.10.1/css/ol.css" type="text/css">
   <title>MyForecast</title>
 </head>
 <body>
 
-<h2>Forecast Search</h2>
+<h2 id="demotest">Forecast Search</h2>
 
 <div id="content" class="container-fluid">
   
@@ -19,7 +20,7 @@
     <section id="Search" class="col-xs-12 col-lg-10 col-lg-offset-1">
       <form id="myForm" name="myForm" method="POST">
         <div class="form-group col-lg-3 col-xs-12">
-          <ul class="ul">
+          <ul class="ul1">
             <li>
               <label class="control-label" for="stAddress"><span class="font1">Street Address:</span><span class="red">*</span></label>
             </li>
@@ -32,7 +33,7 @@
         </div>  
 
         <div class="form-group col-lg-2 col-xs-12">
-          <ul class="ul">
+          <ul class="ul1">
             <li>
               <label class="control-label" for="city"><span class="font1">City:</span><span class="red">*</span></label>
             </li>
@@ -45,7 +46,7 @@
         </div>
 
         <div class="form-group col-lg-2 col-xs-12">
-          <ul class="ul">
+          <ul class="ul1">
             <li>
               <label class="control-label" for="state"><span class="font1">State:</span><span class="red">*</span></label>
             </li>
@@ -109,7 +110,7 @@
         </div>
 
         <div class="form-group col-lg-2 col-xs-12">
-          <ul class="ul">
+          <ul class="ul1">
             <!--<li class="dontshow">a</li>-->
             <li >
               <label class="control-label" for="temperature"><span class="font1">Degree:</span><span class="red">*</span></label>
@@ -128,7 +129,7 @@
         </div>
 
         <div class="form-group col-lg-3 col-xs-12">
-          <ul class="ul">
+          <ul class="ul1">
             <li class="dontshow">a</li>
             <li>
               <button id="clearbtn" onclick="resetInputField(this)" type="button" class="btn btn-Default pull-right"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>  Clear</button>
@@ -162,100 +163,306 @@
 <div class="container-fluid" id='display' style="">
   <div class="row">
       <section id="Result" class="col-xs-12 col-lg-10 col-lg-offset-1">
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" role="tablist">
           <li class="active"><a data-toggle="tab" href="#home">Right Now</a></li>
           <li><a data-toggle="tab" href="#menu1">Next 24 Hours</a></li>
           <li><a data-toggle="tab" href="#menu2">Next 7 Days</a></li>
         </ul>
 
-        <div class="tab-content">
+        <div id="tab" class="tab-content">
+
           <div id="home" class="tab-pane fade in active">
             <div class="row">
-              <section class="col-lg-6 col-xs-12">
-                <div id="foreheader" class="col-lg-12">
-                  <div class="row">
-                    <div id="forepic" class="col-lg-5 col-xs-12">
-                      <img id="pic" src="images/clear.png" height="120px" width="120px">
+              <section class="col-lg-12 col-xs-12">
+                <div class="row">
+                  <section class="col-lg-6 col-xs-12">
+                    <div class="row">
+                      <div id="foreheader" class="col-lg-12">
+                        <div class="row">
+                          <section id="forepic" class="col-lg-5 col-xs-12">
+                          </section>
+                          <section id="forecontent" class="nextday col-lg-7 col-xs-12" style="">
+                            <div class="row" id="a"></div>
+                            <div class="row" id="b"></div>
+                            <div class="row" id="c"></div>
+                          </section>
+                        </div>
+                      </div>
                     </div>
-                    <div id="forecontent" class="col-lg-7 col-xs-12" style="">
-                      <ul style="text-align: center;">
-                        <li class="white" >Mostly Cloudy in Los Angeles, CA</li>
-                        <li class="white"><span id="temp">71</span>°F</li>
-                        <li >
-                          <span id="lowtemp">L: 70°F</span> | <span id="hightemp">H: 79°F</span>
-                          <a href=""><img id="facebook" src="images/fb_icon.png" width="25px" height="25px"></a>
-                        </li>
-                      </ul>
-
+                    <div class="row">
+                      <table class="table table-striped">
+                        <tr>
+                          <td>Precipitation</td>
+                          <td id="precipitation"></td>
+                        </tr>
+                        <tr class="danger">
+                          <td>Chance of Rain</td>
+                          <td id="chanceOfRain"></td>
+                        </tr>
+                        <tr>
+                          <td>Wind Speed</td>
+                          <td id="windSpeed"></td>
+                        </tr>
+                        <tr class="danger">
+                          <td>Dew Point</td>
+                          <td id="dewPoint"></td>
+                        </tr>
+                        <tr>
+                          <td>Humidity</td>
+                          <td id="humidity"></td>
+                        </tr>
+                        <tr class="danger">
+                          <td>Visibility</td>
+                          <td id="visibility"></td>
+                        </tr>
+                        <tr>
+                          <td>Sunrise</td>
+                          <td id="sunrise"></td>
+                        </tr>
+                        <tr class="danger">
+                          <td>Sunset</td>
+                          <td id="sunset"></td>
+                        </tr>
+                      </table>
                     </div>
-                  </div>
+                  </section>
+                  <section class="col-lg-6 col-xs-12">
+                    <div class="row">
+                      <div id="foregeo">
+                        
+                      </div>
+                    </div>
+                  </section>
                 </div>
-                
-                <table class="table table-striped">
-                  <tr>
-                    <td>Precipitation</td>
-                    <td>12345678</td>
-                  </tr>
-                  <tr class="danger">
-                    <td>Chance of Rain</td>
-                    <td>123</td>
-                  </tr>
-                  <tr>
-                    <td>Wind Speed</td>
-                    <td>123</td>
-                  </tr>
-                  <tr class="danger">
-                    <td>Dew Point</td>
-                    <td>123</td>
-                  </tr>
-                  <tr>
-                    <td>Humidity</td>
-                    <td>123</td>
-                  </tr>
-                  <tr class="danger">
-                    <td>Visibility</td>
-                    <td>123</td>
-                  </tr>
-                  <tr>
-                    <td>Sunrise</td>
-                    <td>123</td>
-                  </tr>
-                  <tr class="danger">
-                    <td>Sunset</td>
-                    <td>123</td>
-                  </tr>
-                </table>
               </section>
+            </div>
+          </div>
 
-              <section id="foregeo" class="col-lg-6">
-
+          <div id="menu1" class="tab-pane fade">
+            <div class="row">
+              <section class="col-lg-12 col-xs-12">
+                <div class="row">
+                  <table id="Next" class="center table table-striped">
+                    <tr>
+                      <th class="primary">Time</th>
+                      <th class="primary">Summary</th>
+                      <th class="primary">Cloud Cover</th>
+                      <th class="primary">Temp(°F)</th>
+                      <th class="primary">View Details</th>
+                    </tr>
+                    <tr class="active1">
+                      <td>10:00PM</td>
+                      <td><img src="images/clear.png" height="40px" width="40px"></td>
+                      <td>0%</td>
+                      <td>70.28</td>
+                      <td><a href="#demo" data-toggle="collapse" class="accordion-toggle"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>
+                    </tr>
+                    <tr>
+                      <td colspan="5" class="hiddenRow">
+                        <div class="accordion-body collapse" id="demo">
+                          <table class="center table table-striped">
+                            <thead>
+                              <tr>
+                                <td>Wind</td>
+                                <td>Humidity</td>
+                                <td>Visibility</td>
+                                <td>Pressure</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>4mph</td>
+                                <td>83%</td>
+                                <td>8.37mi</td>
+                                <td>1012.6mb</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="active1">
+                      <td>11:00PM</td>
+                      <td><img src="images/clear.png" height="40px" width="40px"></td>
+                      <td>0%</td>
+                      <td>70.28</td>
+                      <td><a href="#demo1" data-toggle="collapse"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>
+                    </tr>
+                    <tr>
+                      <td colspan="5" class="hiddenRow">
+                        <div class="accordion-body collapse" id="demo1">
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <td>Wind</td>
+                                <td>Humidity</td>
+                                <td>Visibility</td>
+                                <td>Pressure</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>4mph</td>
+                                <td>83%</td>
+                                <td>8.37mi</td>
+                                <td>1012.6mb</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
               </section>
             </div>
           </div>
 
 
-          <div id="menu1" class="tab-pane fade">
-            <h3>Menu 1</h3>
-            <p>Some content in menu 1.</p>
-          </div>
-
-
           <div id="menu2" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p>
+            <div class="row">
+              <section id="back" class="col-lg-12 col-xs-12"> 
+                <div class="row">
+                  <section data-toggle="modal" data-target="#popup5" class="nextday friday col-lg-1 col-xs-12 col-lg-offset-2">
+                    <span class="date">Friday</span><br/>
+                    <span class="date">Oct 16</span><br/>
+                    <img class="pic1" src="images/clear.png" height="67px" width="67px"><br/>
+                    <span class="white">Min<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">67°</span></p>
+                    <span class="white">Max<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">81°</span></p>
+                  </section>
+                  <div class="modal fade" id="popup5">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="myModalLabel">Weather in Los Angeles on Oct 16</h4>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row">
+                            <img id="pic" src="images/clear.png" height="160px" width="160px">
+                          </div>
+                          <br/>
+                          <p class="center">
+                            Friday: <span class="orange">Mostly cloudly throughout the day</span>
+                          </p>
+                          <div class="row">
+                            <div class="popupContent col-lg-4">
+                              <span class="bold">Sunrise Time</span><br/>
+                              <span>07:00 AM</span>
+                            </div>
+                            <div class="popupContent col-lg-4">
+                              <span class="bold">Sunset Time</span><br/>
+                              <span>06:19 PM</span>
+                            </div>
+                            <div class="popupContent col-lg-4">
+                              <span class="bold">Humidity</span><br/>
+                              <span>80%</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="popupContent col-lg-4">
+                              <span class="bold">Wind Speed</span><br/>
+                              <span>3.98mph</span>
+                            </div>
+                            <div class="popupContent col-lg-4">
+                              <span class="bold">Visibility</span><br/>
+                              <span>7.22mi</span>
+                            </div>
+                            <div class="popupContent col-lg-4">
+                              <span class="bold">Pressure</span><br/>
+                              <span>1012.08mb</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <section class="nextday satuaday col-lg-1 col-xs-12">
+                    <span class="date">Friday</span><br/>
+                    <span class="date">Oct 16</span><br/>
+                    <img class="pic1" src="images/clear.png" height="67px" width="67px"><br/>
+                    <span class="white">Min<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">67°</span></p>
+                    <span class="white">Max<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">81°</span></p>
+                  </section>
+                  <section class="nextday sunday col-lg-1 col-xs-12">
+                    <span class="date">Friday</span><br/>
+                    <span class="date">Oct 16</span><br/>
+                    <img class="pic1" src="images/clear.png" height="67px" width="67px"><br/>
+                    <span class="white">Min<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">67°</span></p>
+                    <span class="white">Max<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">81°</span></p>
+                  </section>
+                  <section class="nextday monday col-lg-1 col-xs-12">
+                    <span class="date">Friday</span><br/>
+                    <span class="date">Oct 16</span><br/>
+                    <img class="pic1" src="images/clear.png" height="67px" width="67px"><br/>
+                    <span class="white">Min<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">67°</span></p>
+                    <span class="white">Max<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">81°</span></p>
+                  </section>
+                  <section class="nextday tuesday col-lg-1 col-xs-12">
+                   <span class="date">Friday</span><br/>
+                    <span class="date">Oct 16</span><br/>
+                    <img class="pic1" src="images/clear.png" height="67px" width="67px"><br/>
+                    <span class="white">Min<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">67°</span></p>
+                    <span class="white">Max<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">81°</span></p>
+                  </section>
+                  <section class="nextday wednesday col-lg-1 col-xs-12">
+                  <span class="date">Friday</span><br/>
+                    <span class="date">Oct 16</span><br/>
+                    <img class="pic1" src="images/clear.png" height="67px" width="67px"><br/>
+                    <span class="white">Min<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">67°</span></p>
+                    <span class="white">Max<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">81°</span></p>
+                  </section>
+                  <section class="nextday thursday col-lg-1 col-xs-12">
+                   <span class="date">Friday</span><br/>
+                    <span class="date">Oct 16</span><br/>
+                    <img class="pic1" src="images/clear.png" height="67px" width="67px"><br/>
+                    <span class="white">Min<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">67°</span></p>
+                    <span class="white">Max<span><br/>
+                    <span class="white">Temp</span>
+                    <p><span class="temp1">81°</span></p>
+                  </section>
+                </div>
+              </section>
+            </div>
           </div>
         </div>
       </section>
   </div>
 </div>
 
-<div class="container-fluid">
-  <p id="demo">123</p>
-</div>
-
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/script.js"></script>
 <script src="http://openlayers.org/api/OpenLayers.js"></script>
+<script src="http://openlayers.org/en/v3.10.1/build/ol.js" type="text/javascript"></script>
+<script src="js/script.js"></script>
 </body>
 </html>

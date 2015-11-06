@@ -25,7 +25,7 @@ div.form-group {
 	margin-top: 16px;
 }
 
-ul.ul {
+.ul1 {
 	list-style: none;
 	margin-left: -52px;
 	margin-right: -12px;
@@ -36,7 +36,7 @@ ul > li {
 	list-style: none;
 }
 
-li.white {
+span.white {
 	color: white;
 }
 
@@ -128,4 +128,123 @@ span.radiofont {
 	float: right; 
 	position: relative; 
 	bottom:6px;
+	right: 6px;
+}
+
+#foregeo {
+	height: 432px;
+}
+
+#tab {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+
+th.primary {
+	color: white;
+	background-color: #337ab7;
+	text-align: center;
+}
+
+tr.active1 {
+	background-color: white;
+}
+
+table.center {
+	text-align: center;
+}
+
+section.nextday {
+	text-align: center;
+}
+
+#back {
+	background-color: rgb(47, 52, 57);
+	padding-bottom: 10px;
+}
+
+section.friday { 
+	background: rgb(50, 124, 183); 
+	margin-right:15px; 
+	margin-top:10px; 
+	border-radius: 10px;
+}
+
+section.satuaday { 
+	background: rgb(239, 66, 62);
+	margin-right:15px; 
+	margin-top:10px; 
+	border-radius: 10px;
+}
+
+section.sunday { 
+	background: rgb(232, 142, 72);
+	margin-right:15px; 
+	margin-top:10px; 
+	border-radius: 10px;
+}
+
+section.monday { 
+	background: rgb(167, 165, 46);
+	margin-right:15px; 
+	margin-top:10px; 
+	border-radius: 10px;
+}
+
+section.tuesday { 
+	background: rgb(152, 110, 168);
+	margin-right:15px; 
+	margin-top:10px; 
+	border-radius: 10px;
+}
+
+section.wednesday { 
+	background: rgb(245, 123, 124);
+	margin-right:15px; 
+	margin-top:10px; 
+	border-radius: 10px;
+}
+
+section.thursday { 
+	background: rgb(208, 67, 112);
+	margin-right:15px; 
+	margin-top:10px; 
+	border-radius: 10px;
+}
+
+span.date {
+	font-weight: bolder;
+	color: white;
+	padding-bottom: 10px;
+}
+
+span.temp1 {
+	color: white;
+	font-size: 30px;
+	font-weight: bolder;
+}
+
+img.pic1 {
+	margin-top: 10px;
+}
+
+p.center {
+	text-align: center;
+ 	font-weight: bold;
+ 	font-size: 23px;
+}
+
+span.orange {
+	color: rgb(255, 166, 0);
+	font-family: Sans-serif;
+}
+
+span.bold {
+	font-weight: bolder;
+	font-size: 18px;
+}
+
+div.popupContent {
+	text-align: center;
 }
