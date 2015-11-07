@@ -247,12 +247,13 @@ function addIMG (a) {
 }
 
 function addheader (a) {
-    var elem = document.createElement('span');
+    /*var elem = document.createElement('span');
     elem.setAttribute('class', 'white');
     elem.setAttribute('id', 'weatherCondition');
-    document.getElementById('a').appendChild(elem);
+    document.getElementById('a').appendChild(elem);*/
     var elem1 = document.createElement('br');
     document.getElementById('weatherCondition').innerHTML = a['rightNow']['weatherCondition'];
+    document.getElementById('weatherCondition').setAttribute('name', a['rightNow']['weatherDes']);
     //document.getElementById('forecontent').appendChild(elem1);
     
 

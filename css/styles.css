@@ -129,6 +129,7 @@ span.radiofont {
 	position: relative; 
 	bottom: 6px;
 	right: 20px;
+	cursor: pointer;
 }
 
 #foregeo {

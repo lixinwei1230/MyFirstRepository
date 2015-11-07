@@ -86,6 +86,48 @@
 		return $pic_url;
 	}
 
+	function getIcon1($json) {
+		if ($json["currently"]["icon"] === "clear-day") {
+			$pic_url = "clear.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "clear-night") {
+			$pic_url = "clear_night.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "rain") {
+			$pic_url = "rain.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "snow") {
+			$pic_url = "snow.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "sleet") {
+			$pic_url = "sleet.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "wind") {
+			$pic_url = "wind.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "fog") {
+			$pic_url = "fog.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "cloudy") {
+			$pic_url = "cloudy.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "partly-cloudy-day") {
+			$pic_url = "cloud_day.png"; 
+		}
+		elseif ($json["currently"]["icon"] === "partly-cloudy-night") {
+			$pic_url = "cloud_night.png"; 
+		} else {
+			$pic_url = "";
+		}
+		//$header = array("{$json["currently"]["summary"]}", 
+						//"{$temperature}", 
+						//"{$pic_url}"); 
+		//print_r($Header);
+		return $pic_url;
+	}
+
+
+
 	function getPresipitation ($json) {
 		if ($json["currently"]["precipIntensity"] >= 0 && $json["currently"]["precipIntensity"] < 0.002) {
 			$precipitation = "None";
@@ -398,7 +440,8 @@
 	$json = getJson();
 	//echo json_encode($json);
 	$json1['rightNow']['pic_url'] = getIcon($json);
-	$json1['rightNow']['pic_alt'] = $json["currently"]["icon"];
+	$json1['rightNow']['pic_alt'] = getIcon1($json);
+	$json1['rightNow']['weatherDes'] = $json['currently']['summary'] . ", " . intval($json["currently"]["temperature"]) . getPostfix($json);
 	$json1['rightNow']['weatherCondition'] = $json["currently"]["summary"] . " in " . $_GET['city'] . ", " . $_GET['state'];
 	$json1['rightNow']['temperature'] = intval($json["currently"]["temperature"]);
 	$json1['rightNow']['lowTemperature'] = intval($json["daily"]["data"][0]["temperatureMin"]);
