@@ -1,4 +1,4 @@
-var map = new ol.Map({
+/*var map = new ol.Map({
         target: 'foregeo',
         layers: [
           new ol.layer.Tile({
@@ -9,37 +9,145 @@ var map = new ol.Map({
           center: ol.proj.fromLonLat([-118.2817648, 34.0256596]),
           zoom: 8
         })
-      });
+      });*/
 
-/*
-//Center of map
-var lonlat = new OpenLayers.LonLat(-118.2817648, 34.0256596);
-var map = new OpenLayers.Map("foregeo");
-// Create OSM overlays
-var mapnik = new OpenLayers.Layer.OSM();
+/*$(document).ready(function() {
+    $('#searchButton').click(function() {
+        var abort = false;
+        $("div.error").remove();
+        $(':input[required]').each(function() {
+            if ($(this).val()==='') {
+                $(this).after('<div class="error">This is a required field</div>');
+                abort = true;
+            }
+        }); // go through each required value
+        if (abort) { return false; } else { return true; }
+    })//on submit
+}); // ready */
 
-var layer_cloud = new OpenLayers.Layer.XYZ(
-        "clouds",
-        "http://${s}.tile.openweathermap.org/map/clouds/${z}/${x}/${y}.png",
+function init(lat, lon)
+{
+    var args = OpenLayers.Util.getParameters();
+    var layer_name = "clouds";
+    var layer_name1 = "precipitation";
+    var lat = lat;
+    var lon = lon;
+    var zoom = 6;
+    var opacity = 0.3;
+
+        if (args.l) layer_name = args.l;
+        if (args.lat)   lat = args.lat;
+        if (args.lon)   lon = args.lon;
+        if (args.zoom)  zoom = args.zoom;
+        if (args.opacity)   opacity = args.opacity;
+
+    var map = new OpenLayers.Map("foregeo", 
+    {
+        units:'m',
+        projection: "EPSG:900913",
+        displayProjection: new OpenLayers.Projection("EPSG:4326")
+    });
+
+    /*var osm = new OpenLayers.Layer.XYZ(
+        "osm",
+        "http://${s}.tile.openweathermap.org/map/osm/${z}/${x}/${y}.png",
         {
-            isBaseLayer: false,
-            opacity: 0.7,
+            numZoomLevels: 18, 
             sphericalMercator: true
+        }
+    );*/
+
+
+    var mapnik = new OpenLayers.Layer.OSM();
+
+    /*var opencyclemap = new OpenLayers.Layer.XYZ(
+        "opencyclemap",
+        "http://a.tile3.opencyclemap.org/landscape/${z}/${x}/${y}.png",
+        {
+            numZoomLevels: 18, 
+            sphericalMercator: true
+        }
+    );*/
+
+    var layer = new OpenLayers.Layer.XYZ(
+        "layer "+layer_name,
+        "http://${s}.tile.openweathermap.org/map/"+layer_name+"/${z}/${x}/${y}.png",
+        //"http://wind.openweathermap.org/map/"+layer_name+"/${z}/${x}/${y}.png",
+        {
+//          numZoomLevels: 19, 
+            isBaseLayer: false,
+            opacity: opacity,
+            sphericalMercator: true
+
         }
     );
 
-    var layer_precipitation = new OpenLayers.Layer.XYZ(
-        "precipitation",
-        "http://${s}.tile.openweathermap.org/map/precipitation/${z}/${x}/${y}.png",
+    var layer1 = new OpenLayers.Layer.XYZ(
+        "layer "+layer_name1,
+        "http://${s}.tile.openweathermap.org/map/"+layer_name1+"/${z}/${x}/${y}.png",
+        //"http://wind.openweathermap.org/map/"+layer_name1+"/${z}/${x}/${y}.png",
         {
+//          numZoomLevels: 19, 
             isBaseLayer: false,
-            opacity: 0.7,
+            opacity: opacity,
             sphericalMercator: true
+
         }
     );
 
-    map.addLayers([mapnik, layer_precipitation, layer_cloud]);
-*/
+    var centre = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"), 
+                                new OpenLayers.Projection("EPSG:900913"));
+    map.addLayers([mapnik, layer, layer1]);
+        map.setCenter( centre, zoom);
+    var ls = new OpenLayers.Control.LayerSwitcher({'ascending':false});
+    map.addControl(ls);
+
+    /*map.events.register("mousemove", map, function (e) {
+        var position = map.getLonLatFromViewPortPx(e.xy).transform(new OpenLayers.Projection("EPSG:900913"), 
+                                new OpenLayers.Projection("EPSG:4326"));
+
+        $("#mouseposition").html("Lat: " + Math.round(position.lat*100)/100 + " Lon: " + Math.round(position.lon*100)/100 +
+            ' zoom: '+ map.getZoom());
+    });*/
+
+}
+
+function validation () {
+    var abort = false;
+    $("div.error").remove();
+    $(':input[required]').each(function() {
+        if ($(this).val()==='' && $(this).attr('id')==='city') {
+            $(this).after('<div class="error" style="color: red">Please enter the city</div>');
+            abort = true;
+        }
+        if ($(this).val()==='' && $(this).attr('id')==='state') {
+            $(this).after('<div class="error" style="color: red">Please select a state</div>');
+            abort = true;
+        }
+        if ($(this).val()==='' && $(this).attr('id')==='stAddress') {
+            $(this).after('<div class="error" style="color: red">Please enter the street address</div>');
+            abort = true;
+        }
+        /*if ($('#stAddress').val() === '') {
+            $('#stAddress').after('<div class="error">Please enter the street address</div>');
+            abort = true;
+        }
+        if ($('#city').val() === '') {
+            $('#city').after('<div class="error">Please enter the city</div>');
+            abort = true;
+        }
+        if ($('#state').val() === '') {
+            $('#state').after('<div class="error">Please select a state</div>');
+            abort = true;
+        }*/
+
+    }); // go through each required value
+    if (abort) { 
+        return false; 
+    } else { 
+        parseJson();
+    }
+}
 
 function parseJson () {
 	var strAddress = '';
@@ -47,7 +155,7 @@ function parseJson () {
 	var State = '';
 	var Temp = '';
 
-    if (document.getElementById('stAddress').value === "") {
+    /*if (document.getElementById('stAddress').value === "") {
 		document.getElementById('valiAddre').style.display = "block";
         return false;
 	} else {
@@ -72,8 +180,19 @@ function parseJson () {
 		Temp = document.getElementById('Fahrenheit').value;
 	} else {
 		Temp = document.getElementById('Celsius').value;
-	}
-    //document.getElementById("display").style.display = "block";
+	}*/
+
+    
+    
+    strAddress = document.getElementById('stAddress').value;
+    City = document.getElementById('city').value;
+    State = document.getElementById('state').value;
+    if (document.getElementById('Fahrenheit').checked) {
+        Temp = document.getElementById('Fahrenheit').value;
+    } else {
+        Temp = document.getElementById('Celsius').value;
+    }
+
     var request;
     var url = '';
     if (window.XMLHttpRequest) {
@@ -86,19 +205,31 @@ function parseJson () {
     url += City + '&state=';
     url += State + '&temperature=';
     url += Temp;
-    alert(url);
+    //alert(url);
     request.open("GET", url, true);
     request.onreadystatechange = function() {
       if((request.status === 200) && (request.readyState ===4)) {
         var rightNow = JSON.parse(request.responseText);
         //alert(rightNow['rightNow']['pic_url']);
         console.log(rightNow);
-        //addIMG(rightNow);
-        //addheader(rightNow);
-        //addRightNowContent(rightNow);
+        addIMG(rightNow);
+        addheader(rightNow);
+        addRightNowContent(rightNow);
+        document.getElementById('prefix').innerHTML = "(" + rightNow['rightNow']['postPrefix'] + ")";
+        addNextHoursContent(rightNow);
+        addNextDaysContent(rightNow);
+        document.getElementById("display").style.display = "block";
+        if (document.getElementById('foregeo').childElementCount == 0) {
+            var lat = rightNow['latitude'];
+            var lon = rightNow['longitude'];
+            init(lat, lon);
+        }
+        
       }
     }
     request.send();
+
+    
   }
 
 function addIMG (a) {
@@ -106,6 +237,7 @@ function addIMG (a) {
         var elem = document.createElement('img');
         elem.setAttribute('src', a['rightNow']['pic_url']);
         elem.setAttribute('id', 'pic');
+        elem.setAttribute('alt', a['rightNow']['pic_alt'])
         elem.setAttribute('height', '120px');
         elem.setAttribute('width', '120px');
         document.getElementById('forepic').appendChild(elem);
@@ -153,7 +285,7 @@ function addheader (a) {
     document.getElementById('c').appendChild(elem6);
     document.getElementById('hightemp').innerHTML = a['rightNow']['highTemperature'] + a['rightNow']['postPrefix'];
 
-    if (document.getElementById('c').childElementCount == 3) {
+    /*if (document.getElementById('c').childElementCount == 3) {
         var elem7 = document.createElement('a');
         elem7.setAttribute('href', 'www.baidu.com');
         elem7.setAttribute('id', 'faceBookTag');
@@ -166,7 +298,7 @@ function addheader (a) {
         document.getElementById('faceBookTag').appendChild(elem8);
     } else {
         return false;
-    }
+    }*/
 }
 
 function addRightNowContent(a) {
@@ -178,6 +310,170 @@ function addRightNowContent(a) {
     document.getElementById('visibility').innerHTML = a['rightNow']['visibility'];
     document.getElementById('sunrise').innerHTML = a['rightNow']['sunrise'];
     document.getElementById('sunset').innerHTML = a['rightNow']['sunset'];
+}
+
+function addNextHoursContent(a) {
+    /*var table = document.getElementById('Next');
+    var tds = table.getElementsByTagName('td');
+    //alert(tds.length);
+    for (var i = 0; i < tds.length; i ++) {
+        var j = Math.floor(i / 14);
+        var k = i % 14;
+        if (k === 1) {
+            if (tds[i].childElementCount == 0) {
+                var elem = document.createElement('img');
+                elem.setAttribute('src', a['next24Hours'][j][k]);
+                elem.setAttribute('alt', 'picture not found');
+                elem.setAttribute('height', '40px');
+                elem.setAttribute('width', '40px');
+                tds[i].appendChild(elem);
+            }
+        } else {
+            if(tds[i].innerHTML == ""){
+            tds[i].innerHTML = a['next24Hours'][j][k];
+            //alert(i);
+            }
+        } 
+    }*/
+    var hourlyTime = document.getElementsByClassName('hourlyTime');
+    for (var i = 0; i < hourlyTime.length; i++) {
+        hourlyTime[i].innerHTML = a['next24Hours'][i]['hourlyTime'];
+    }
+
+    var hourlySummary = document.getElementsByClassName('hourlySummary');
+    for (var i = 0; i < hourlySummary.length; i++) {
+        if (hourlySummary[i].childElementCount == 0) {
+                var elem = document.createElement('img');
+                elem.setAttribute('src', a['next24Hours'][i]['hourlySummary']);
+                elem.setAttribute('alt', 'picture not found');
+                elem.setAttribute('height', '40px');
+                elem.setAttribute('width', '40px');
+                hourlySummary[i].appendChild(elem);
+            }
+    }
+
+    var hourlyCloudCover = document.getElementsByClassName('hourlyCloudCover');
+    for (var i = 0; i < hourlyCloudCover.length; i++) {
+        hourlyCloudCover[i].innerHTML = a['next24Hours'][i]['hourlyCloudCover'];
+    }
+
+    var hourlyTemp = document.getElementsByClassName('hourlyTemp');
+    for (var i = 0; i < hourlyTemp.length; i++) {
+        hourlyTemp[i].innerHTML = a['next24Hours'][i]['hourlyTemp'];
+    }
+
+    var hourlyWind = document.getElementsByClassName('hourlyWind');
+    for (var i = 0; i < hourlyWind.length; i++) {
+        hourlyWind[i].innerHTML = a['next24Hours'][i]['hourlyWind'];
+    }
+
+    var hourlyHumidity = document.getElementsByClassName('hourlyHumidity');
+    for (var i = 0; i < hourlyHumidity.length; i++) {
+        hourlyHumidity[i].innerHTML = a['next24Hours'][i]['hourlyHumidity'];
+    } 
+
+    var hourlyVisibility = document.getElementsByClassName('hourlyVisibility');
+    for (var i = 0; i < hourlyVisibility.length; i++) {
+        hourlyVisibility[i].innerHTML = a['next24Hours'][i]['hourlyVisibility'];
+    }
+
+    var hourlyPressure = document.getElementsByClassName('hourlyPressure');
+    for (var i = 0; i < hourlyPressure.length; i++) {
+        hourlyPressure[i].innerHTML = a['next24Hours'][i]['hourlyPressure'];
+    }
+}
+
+function addNextDaysContent(a) {
+    var week = document.getElementsByClassName('week');
+    for (var i = 0; i < week.length; i++) {
+        week[i].innerHTML = a['next7Days'][i]['day'];
+    }
+
+    var date = document.getElementsByClassName('date');
+    for (var i = 0; i < date.length; i++) {
+        date[i].innerHTML = a['next7Days'][i]['monthDate'];
+    }
+
+    var img = document.getElementsByClassName('img');
+    for (var i = 0; i < img.length; i++) {
+        if (img[i].childElementCount == 0) {
+                var elem = document.createElement('img');
+                elem.setAttribute('class', 'pic1');
+                elem.setAttribute('src', a['next7Days'][i]['icon']);
+                elem.setAttribute('alt', 'picture not found');
+                elem.setAttribute('height', '67px');
+                elem.setAttribute('width', '67px');
+                img[i].appendChild(elem);
+            }
+    }
+
+    var tempMin = document.getElementsByClassName('temp1');
+    for (var i = 0; i < tempMin.length; i++) {
+        tempMin[i].innerHTML = a['next7Days'][i]['minTemp']
+    }
+
+    var tempMax = document.getElementsByClassName('temp2');
+    for (var i = 0; i < tempMin.length; i++) {
+        tempMax[i].innerHTML = a['next7Days'][i]['maxTemp']
+    }
+
+    var header = document.getElementsByClassName('modal-title');
+    for (var i = 0; i < header.length; i++) {
+        header[i].innerHTML = a['next7Days'][i]['header'];
+    }
+
+    var img1 = document.getElementsByClassName('modelpic');
+    for (var i = 0; i < img1.length; i++) {
+        if (img1[i].childElementCount == 0) {
+                var elem = document.createElement('img');
+                elem.setAttribute('id', 'pic');
+                elem.setAttribute('src', a['next7Days'][i]['icon']);
+                elem.setAttribute('alt', 'picture not found');
+                elem.setAttribute('height', '162px');
+                elem.setAttribute('width', '162px');
+                img1[i].appendChild(elem);
+            }
+    }
+
+    var week1 = document.getElementsByClassName('week1');
+    for (var i = 0; i < week1.length; i++) {
+        week1[i].innerHTML = a['next7Days'][i]['day']+ ": ";
+    }
+
+    var des = document.getElementsByClassName('orange');
+    for (var i = 0; i < des.length; i ++) {
+        des[i].innerHTML = a['next7Days'][i]['summary'];
+    }
+
+    var sunrise = document.getElementsByClassName('sunrisetime');
+    for (var i = 0; i < sunrise.length; i++) {
+        sunrise[i].innerHTML = a['next7Days'][i]['sunrise'];
+    }
+
+    var sunset = document.getElementsByClassName('sunset');
+    for (var i = 0; i < sunset.length; i++) {
+        sunset[i].innerHTML = a['next7Days'][i]['sunset'];
+    }
+
+    var dailyhumidity = document.getElementsByClassName('dailyhumidity');
+    for (var i = 0; i < dailyhumidity.length; i++) {
+        dailyhumidity[i].innerHTML = a['next7Days'][i]['humidity'];
+    }
+
+    var dailyWindSpeed = document.getElementsByClassName('dailyWindSpeed');
+    for (var i = 0; i < dailyWindSpeed.length; i++) {
+        dailyWindSpeed[i].innerHTML = a['next7Days'][i]['windSpeed'];
+    }
+
+    var dailyVisibility = document.getElementsByClassName('dailyVisibility');
+    for (var i = 0; i < dailyVisibility.length; i++) {
+        dailyVisibility[i].innerHTML = a['next7Days'][i]['dailyvisibility'];
+    }
+
+    var dailypressure = document.getElementsByClassName('dailypressure');
+    for (var i = 0; i < dailypressure.length; i++) {
+        dailypressure[i].innerHTML = a['next7Days'][i]['pressure'];
+    }
 }
 
 function resetInputField (myForm) {

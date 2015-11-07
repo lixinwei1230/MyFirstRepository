@@ -369,13 +369,18 @@
 	}
 
 	function getDailyVisibility ($a) {
-		$visibility = $a['visibility'];
-		if ($_GET["temperature"] === "Fahrenheit") {
-			$visibility .= " mi";
-		} else {
-			$visibility .= " km";
+		foreach ($a as $value => $test) {
+			if ($value == "visibility") {
+				$visibility1 = $a['visibility'];
+			    if ($_GET["temperature"] === "Fahrenheit") {
+					$visibility1 .= " mi";
+				} else {
+					$visibility1 .= " km";
+				}
+				return $visibility1;
+			} 
 		}
-		return $visibility;
+		return "N.A";
 	}
 
 	function getDailyPressure ($a) {
@@ -392,7 +397,7 @@
 <?php 
 	$json = getJson();
 	//echo json_encode($json);
-	//$json1['rightNow']['pic_url'] = getIcon($json);
+	$json1['rightNow']['pic_url'] = getIcon($json);
 	$json1['rightNow']['pic_alt'] = $json["currently"]["icon"];
 	$json1['rightNow']['weatherCondition'] = $json["currently"]["summary"] . " in " . $_GET['city'] . ", " . $_GET['state'];
 	$json1['rightNow']['temperature'] = intval($json["currently"]["temperature"]);
@@ -410,14 +415,14 @@
 
 	for ($i = 0; $i < 24; $i++) {
 		$hourly = $json["hourly"]["data"][$i+1];
-		$json1['next24Hours'][$i]['time'] = getHourlyTime($json, $hourly);
-		$json1['next24Hours'][$i]['summary'] = getHourlyIcon($hourly);
-		$json1['next24Hours'][$i]['cloudCover'] = getHourlyCloudCover($hourly);
-		$json1['next24Hours'][$i]['temp'] = getHourlyTemp($hourly);
-		$json1['next24Hours'][$i]['wind'] = getHourlyWind($hourly);
-		$json1['next24Hours'][$i]['humidity'] = getHourlyHumidity($hourly);
-		$json1['next24Hours'][$i]['visibility'] = getHourlyVisibility($hourly);
-		$json1['next24Hours'][$i]['pressure'] = getHourlyPressure($hourly);
+		$json1['next24Hours'][$i]['hourlyTime'] = getHourlyTime($json, $hourly);
+		$json1['next24Hours'][$i]['hourlySummary'] = getHourlyIcon($hourly);
+		$json1['next24Hours'][$i]['hourlyCloudCover'] = getHourlyCloudCover($hourly);
+		$json1['next24Hours'][$i]['hourlyTemp'] = getHourlyTemp($hourly);
+		$json1['next24Hours'][$i]['hourlyWind'] = getHourlyWind($hourly);
+		$json1['next24Hours'][$i]['hourlyHumidity'] = getHourlyHumidity($hourly);
+		$json1['next24Hours'][$i]['hourlyVisibility'] = getHourlyVisibility($hourly);
+		$json1['next24Hours'][$i]['hourlyPressure'] = getHourlyPressure($hourly);
 	}
 
 	for ($i = 0; $i < 7; $i++) {
@@ -434,11 +439,13 @@
 		$json1['next7Days'][$i]['sunset'] = getDailySunSet($json, $daily);
 		$json1['next7Days'][$i]['humidity'] = getDailyHumidity($daily);
 		$json1['next7Days'][$i]['windSpeed'] = getDailyWindSpeed($daily);
-		//$json1['next7Days'][$i]['dailyvisibility'] = getDailyVisibility($daily);
+		$json1['next7Days'][$i]['dailyvisibility'] = getDailyVisibility($daily);
 		$json1['next7Days'][$i]['pressure'] = getDailyPressure($daily);
 	}
+
+	$json1['longitude'] = $json['longitude'];
+	$json1['latitude'] = $json['latitude'];
 	
-
-
+	//echo json_encode($json);
 	echo json_encode($json1);
 ?>

@@ -127,12 +127,12 @@ span.radiofont {
 #facebook {
 	float: right; 
 	position: relative; 
-	bottom:6px;
-	right: 6px;
+	bottom: 6px;
+	right: 20px;
 }
 
 #foregeo {
-	height: 432px;
+	height: 427px;
 }
 
 #tab {
@@ -157,6 +157,7 @@ table.center {
 
 section.nextday {
 	text-align: center;
+	padding: 0;
 }
 
 #back {
@@ -219,7 +220,21 @@ span.date {
 	padding-bottom: 10px;
 }
 
+span.week {
+	font-weight: bolder;
+	color: white;
+	padding-bottom: 10px;
+	text-align: center;
+
+}
+
 span.temp1 {
+	color: white;
+	font-size: 30px;
+	font-weight: bolder;
+}
+
+span.temp2 {
 	color: white;
 	font-size: 30px;
 	font-weight: bolder;
@@ -248,3 +263,9 @@ span.bold {
 div.popupContent {
 	text-align: center;
 }
+
+div.error {
+	color: red;
+}
+
+
