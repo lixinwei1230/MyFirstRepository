@@ -30,17 +30,18 @@ function init(lat, lon)
     var args = OpenLayers.Util.getParameters();
     var layer_name = "clouds";
     var layer_name1 = "precipitation";
-    var lat = lat;
-    var lon = lon;
-    var zoom = 6;
-    var opacity = 0.3;
+    var lat1 = lat;
+    var lon1 = lon;
+    var zoom = 5;
+    var opacity = 0.6;
 
-        if (args.l) layer_name = args.l;
+    /*    if (args.l) layer_name = args.l;
         if (args.lat)   lat = args.lat;
         if (args.lon)   lon = args.lon;
         if (args.zoom)  zoom = args.zoom;
         if (args.opacity)   opacity = args.opacity;
 
+    */
     var map = new OpenLayers.Map("foregeo", 
     {
         units:'m',
@@ -95,10 +96,14 @@ function init(lat, lon)
         }
     );
 
-    var centre = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"), 
+    var centre = new OpenLayers.LonLat(lon1, lat1).transform(new OpenLayers.Projection("EPSG:4326"), 
                                 new OpenLayers.Projection("EPSG:900913"));
+    /*lonlat.transform(
+            new OpenLayers.Projection("EPSG:4326"), 
+            new OpenLayers.Projection("EPSG:900913")
+    );*/
     map.addLayers([mapnik, layer, layer1]);
-        map.setCenter( centre, zoom);
+    map.setCenter( centre, zoom);
     var ls = new OpenLayers.Control.LayerSwitcher({'ascending':false});
     map.addControl(ls);
 
@@ -200,11 +205,12 @@ function parseJson () {
     } else {
       request = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    url += 'index.php?stAddress=';
+    url += 'http://default-environment-dtv3aunj2z.elasticbeanstalk.com/index.php?stAddress=';
     url += strAddress + '&city=';
     url += City + '&state=';
     url += State + '&temperature=';
     url += Temp;
+    //alert(url);
     //alert(url);
     request.open("GET", url, true);
     request.onreadystatechange = function() {
@@ -220,6 +226,15 @@ function parseJson () {
         addNextDaysContent(rightNow);
         document.getElementById("display").style.display = "block";
         if (document.getElementById('foregeo').childElementCount == 0) {
+            var lat = rightNow['latitude'];
+            var lon = rightNow['longitude'];
+            init(lat, lon);
+        } 
+        if (document.getElementById('foregeo').childElementCount == 1) {
+            var myNode = document.getElementById('foregeo');
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
             var lat = rightNow['latitude'];
             var lon = rightNow['longitude'];
             init(lat, lon);
