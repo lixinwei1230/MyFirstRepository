@@ -117,6 +117,166 @@ function init(lat, lon)
 
 }
 
+//=========================
+//start of initialization
+//=========================
+$(document).ready(function() {
+
+    /*
+    $('.fb_logo').click(function(){
+        fbHandler();
+    });
+    */
+    
+    /*$( "#clear" ).click(function() {
+        //alert("jiji");
+        validator.resetForm();
+        $('#output').collapse('hide');
+        mapDefined = false;
+        $('#basicMap').empty();
+        $(this).closest('form').find("input[type=text], textarea").val("");
+        $('#fahrenheit','#myform').attr("checked",true);
+        $('#defaultSel','#myform').attr("selected", true);
+    });//clear click*/
+
+    $( "#searchButton" ).click(function() {
+        if($("#myForm").valid()){
+            ajax();
+        }
+    });
+                         
+    jQuery.validator.addMethod("notBlank", function(value, element) {
+        return this.optional(element) || $.trim(value) != "";
+        //return $.trim(value) > 0;
+    }, "Please enter non-blank street address");
+
+    jQuery.validator.addMethod("notDefault", function(value, element) {
+      return this.optional(element) || value != "Select your state...";
+    }, "Please select a state");
+
+    var validator = $( "#myForm" ).validate({
+        rules: {
+            stAddress: {
+                required: true,
+                notBlank: true
+            },
+            city: {
+                required: true,
+                notBlank: true
+            },
+            state:{
+                required: true,
+                notDefault: true
+            }
+        },
+        messages: {
+            stAddress:{
+                required: "Please enter the street address",
+                notBlank: "Please enter non-blank street address"
+            },
+            city:{
+                required: "Please enter the city",
+                notBlank: "Please enter non-blank city"
+            },
+            state:{
+                required: "Please select a state",
+                notDefault: "Please select a state"
+            }
+        },
+
+        errorPlacement: function(error, element) {
+              if(element.attr("name") == "stAddress") {
+                    error.appendTo( $("#valiAddre") );
+              }else if(element.attr("name") == "city"){
+                  error.appendTo( $("#valiCity") );
+              }else if(element.attr("name") == "state"){
+                  error.appendTo( $("#valiState") );
+              }else {
+                    error.insertAfter(element);
+              }
+        },
+
+        submitHandler: function() {
+            ajax();
+        },
+    })
+
+});//end document ready
+//=========================
+//end of initialization
+//=========================   
+            
+
+function ajax(callback) {
+    var strAddress = '';
+    var City = '';
+    var State = '';
+    var Temp = '';
+    var url1 = '';
+
+
+    
+    strAddress = document.getElementById('stAddress').value;
+    City = document.getElementById('city').value;
+    State = document.getElementById('state').value;
+    if (document.getElementById('Fahrenheit').checked) {
+        Temp = document.getElementById('Fahrenheit').value;
+    } else {
+        Temp = document.getElementById('Celsius').value;
+    }
+
+    url1 += 'http://default-environment-dtv3aunj2z.elasticbeanstalk.com/index.php?stAddress=';
+    url1 += strAddress + '&city=';
+    url1 += City + '&state=';
+    url1 += State + '&temperature=';
+    url1 += Temp;
+    //alert(url1);
+
+    //php_data = $('#myForm').serialize() + "&submit=submit";
+    // ===========================
+    // ajax starts here
+    // ===========================
+    $.ajax({ 
+        //url:'http://cs-server.usc.edu:9292/cgi-bin/index.php',
+        // When implementing, change it to the one below
+        url: url1,
+        crossDomain: true,
+        dataType: 'json',
+        //data: php_data,
+        type:'GET',
+        success:function(rightNow){
+            //var rightNow = JSON.parse(request.responseText);
+            //alert(rightNow['rightNow']['pic_url']);
+            console.log(rightNow);
+            addIMG(rightNow);
+            addheader(rightNow);
+            addRightNowContent(rightNow);
+            document.getElementById('prefix').innerHTML = "(" + rightNow['rightNow']['postPrefix'] + ")";
+            addNextHoursContent(rightNow);
+            addNextDaysContent(rightNow);
+            document.getElementById("display").style.display = "block";
+            if (document.getElementById('foregeo').childElementCount == 0) {
+                var lat = rightNow['latitude'];
+                var lon = rightNow['longitude'];
+                init(lat, lon);
+            } 
+            if (document.getElementById('foregeo').childElementCount == 1) {
+                var myNode = document.getElementById('foregeo');
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+                var lat = rightNow['latitude'];
+                var lon = rightNow['longitude'];
+                init(lat, lon);
+            }
+        },
+        error:function(err){
+            alert("there is error:" + err.message);
+        }
+    });
+}
+
+
 function validation () {
     var abort = false;
     $("div.error").remove();
@@ -160,34 +320,7 @@ function parseJson () {
 	var State = '';
 	var Temp = '';
 
-    /*if (document.getElementById('stAddress').value === "") {
-		document.getElementById('valiAddre').style.display = "block";
-        return false;
-	} else {
-		document.getElementById('valiAddre').style.display = "none";
-		strAddress = document.getElementById('stAddress').value;
-	}
-	if (document.getElementById('city').value === "") {
-		document.getElementById('valiCity').style.display = "block";
-        return false;
-	} else {
-		document.getElementById('valiCity').style.display = "none";
-		City = document.getElementById('city').value;
-	}
-	if (document.getElementById('state').value === "") {
-		document.getElementById('valiState').style.display = "block";
-		return false;
-	} else {
-		document.getElementById('valiCity').style.display = "none";
-		State = document.getElementById('state').value;
-	}
-	if (document.getElementById('Fahrenheit').checked) {
-		Temp = document.getElementById('Fahrenheit').value;
-	} else {
-		Temp = document.getElementById('Celsius').value;
-	}*/
 
-    
     
     strAddress = document.getElementById('stAddress').value;
     City = document.getElementById('city').value;

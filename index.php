@@ -495,4 +495,9 @@
 	
 	//echo json_encode($json);
 	echo json_encode($json1);
+
+	/*if($_GET['hello'] === '123'){
+		echo 'hehe'
+	}*/
+
 ?>
