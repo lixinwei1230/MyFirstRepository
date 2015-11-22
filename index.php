@@ -488,6 +488,7 @@
 		$json1['next7Days'][$i]['windSpeed'] = getDailyWindSpeed($daily);
 		$json1['next7Days'][$i]['dailyvisibility'] = getDailyVisibility($daily);
 		$json1['next7Days'][$i]['pressure'] = getDailyPressure($daily);
+		$json1['next7Days'][$i]['postPrefix'] = getPostfix($json);
 	}
 
 	$json1['longitude'] = $json['longitude'];

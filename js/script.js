@@ -225,12 +225,13 @@ function ajax(callback) {
         Temp = document.getElementById('Celsius').value;
     }
 
+    //url1 += "index.php?stAddress=";
     url1 += 'http://default-environment-dtv3aunj2z.elasticbeanstalk.com/index.php?stAddress=';
     url1 += strAddress + '&city=';
     url1 += City + '&state=';
     url1 += State + '&temperature=';
     url1 += Temp;
-    //alert(url1);
+    alert(url1);
 
     //php_data = $('#myForm').serialize() + "&submit=submit";
     // ===========================
