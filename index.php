@@ -11,7 +11,6 @@
 			$url .= "+" . urlencode($_GET["city"]) . ",";
 			$url .= "+" . urlencode($_GET["state"]);
 			$url .= "&key=" . $api_key2;
-			$url;
 			$xml = simplexml_load_file($url);
 			//var_dump($xml);
 			$lat = $xml -> result -> geometry -> location -> lat;
@@ -460,7 +459,7 @@
 	$json1['rightNow']['sunrise'] = getSunrise($json);
 	$json1['rightNow']['sunset'] = getSunset($json);
 
-	for ($i = 0; $i < 24; $i++) {
+	for ($i = 0; $i < 48; $i++) {
 		$hourly = $json["hourly"]["data"][$i+1];
 		$json1['next24Hours'][$i]['hourlyTime'] = getHourlyTime($json, $hourly);
 		$json1['next24Hours'][$i]['hourlySummary'] = getHourlyIcon($hourly);
@@ -493,6 +492,7 @@
 
 	$json1['longitude'] = $json['longitude'];
 	$json1['latitude'] = $json['latitude'];
+	$json1['test'] = "hello world"
 	
 	//echo json_encode($json);
 	echo json_encode($json1);
